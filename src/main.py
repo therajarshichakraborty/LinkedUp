@@ -208,6 +208,30 @@ def apply_theme(is_dark):
 
 
 def main():
+    import os
+    if not os.getenv("GROQ_CLOUD_API_KEY"):
+        st.error("🔑 **Groq API Key is missing!**\n\nPlease configure your `GROQ_CLOUD_API_KEY` to start generating posts.")
+        st.markdown(
+            """
+            ### How to fix:
+            * **On Streamlit Cloud:**
+              1. Click **Manage app** in the bottom-right corner of your app screen.
+              2. Open the app settings / secrets menu (three dots icon).
+              3. Paste the following line:
+                 ```toml
+                 GROQ_CLOUD_API_KEY = "your-actual-groq-key"
+                 ```
+              4. Save and the app will redeploy automatically.
+            
+            * **On Localhost:**
+              Make sure you have a `.env` file in the root folder containing:
+              ```env
+              GROQ_CLOUD_API_KEY="your-actual-groq-key"
+              ```
+            """
+        )
+        return
+
     if "theme" not in st.session_state:
         st.session_state.theme = True
 
