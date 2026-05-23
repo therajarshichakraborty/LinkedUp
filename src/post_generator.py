@@ -1,4 +1,4 @@
-from llm_integration import llm
+from llm_integration import get_llm
 from few_shot_prompting import FewShotPrompting
 
 few_shot = FewShotPrompting()
@@ -14,6 +14,9 @@ def get_length_str(length):
 
 
 def generate_post(length, language, tag):
+    llm = get_llm()
+    if llm is None:
+        raise ValueError("Groq API Key is not configured. Please set the GROQ_CLOUD_API_KEY environment variable or Streamlit Secrets.")
     prompt = get_prompt(length, language, tag)
     response = llm.invoke(prompt)
     return response.content

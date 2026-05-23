@@ -209,7 +209,15 @@ def apply_theme(is_dark):
 
 def main():
     import os
-    if not os.getenv("GROQ_CLOUD_API_KEY"):
+    
+    api_key = os.getenv("GROQ_CLOUD_API_KEY")
+    if not api_key:
+        try:
+            api_key = st.secrets.get("GROQ_CLOUD_API_KEY")
+        except Exception:
+            pass
+
+    if not api_key:
         st.error("🔑 **Groq API Key is missing!**\n\nPlease configure your `GROQ_CLOUD_API_KEY` to start generating posts.")
         st.markdown(
             """
