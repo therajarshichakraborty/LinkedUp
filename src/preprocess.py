@@ -66,8 +66,6 @@ def processed_posts(raw_post_path, processed_post_path="../data/processed-post.j
     good_post = []
     with open(raw_post_path, encoding="utf-8") as file:
         posts = json.load(file)
-        # print(posts)
-        # print(type(posts))
 
         for post in posts:
             metadata = extract_metadata(post["text"])

@@ -1,7 +1,6 @@
 import streamlit as st
 from few_shot_prompting import FewShotPrompting
 from post_generator import generate_post
-import base64
 
 st.set_page_config(
     page_title="LinkedIn Post Generator",
@@ -18,17 +17,19 @@ def apply_theme(is_dark):
         st.markdown(
             """
             <style>
+            :root {
+                --bg-gradient: linear-gradient(135deg, #0f172a, #020617);
+                --card-bg: #1e293b;
+                --text-color: #f8fafc;
+                --muted-text: #94a3b8;
+                --border-color: #334155;
+                --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+                --selectbox-bg: #1e293b;
+                --selectbox-text: #f8fafc;
+            }
             .stApp {
-                background-color: #0e1117;
-                color: white;
-            }
-            div[data-baseweb="select"] > div {
-                background-color: #262730;
-                color: white;
-            }
-            textarea {
-                background-color: #262730 !important;
-                color: white !important;
+                background: var(--bg-gradient);
+                color: var(--text-color);
             }
             </style>
             """,
@@ -38,80 +39,250 @@ def apply_theme(is_dark):
         st.markdown(
             """
             <style>
+            :root {
+                --bg-gradient: linear-gradient(135deg, #f8fafc, #f1f5f9);
+                --card-bg: #ffffff;
+                --text-color: #0f172a;
+                --muted-text: #475569;
+                --border-color: #e2e8f0;
+                --accent-gradient: linear-gradient(135deg, #2563eb, #3b82f6);
+                --selectbox-bg: #ffffff;
+                --selectbox-text: #0f172a;
+            }
             .stApp {
-                background-color: white;
-                color: black;
+                background: var(--bg-gradient);
+                color: var(--text-color);
             }
             </style>
             """,
             unsafe_allow_html=True
         )
-        
-        
-def get_download_link(text):
-    b64 = base64.b64encode(text.encode()).decode()
-    return f'<a href="data:file/txt;base64,{b64}" download="linkedin_post.txt">📥 Download as .txt</a>'
+
+    st.markdown(
+        """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+        html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }
+
+        div[data-testid="stVerticalBlockBorderWrapper"] > div {
+            background-color: var(--card-bg) !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 16px !important;
+            padding: 24px !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        div[data-baseweb="select"] > div {
+            background-color: var(--selectbox-bg) !important;
+            color: var(--selectbox-text) !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 10px !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }
+
+        textarea {
+            background-color: var(--selectbox-bg) !important;
+            color: var(--selectbox-text) !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 10px !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            line-height: 1.6 !important;
+        }
+
+        div.stButton > button {
+            background: var(--accent-gradient) !important;
+            color: white !important;
+            border: none !important;
+            padding: 12px 24px !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            font-size: 16px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
+            width: 100% !important;
+        }
+
+        div.stButton > button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3) !important;
+            opacity: 0.95;
+        }
+
+        div.stButton > button:active {
+            transform: translateY(1px) !important;
+        }
+
+        div.stDownloadButton > button {
+            background: transparent !important;
+            color: var(--text-color) !important;
+            border: 1px solid var(--border-color) !important;
+            padding: 12px 24px !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            font-size: 16px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            width: 100% !important;
+        }
+
+        div.stDownloadButton > button:hover {
+            background: var(--border-color) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .linkedin-card {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+
+        .linkedin-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .linkedin-avatar {
+            font-size: 24px;
+            background: var(--accent-gradient);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .linkedin-user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .linkedin-user-info strong {
+            font-size: 15px;
+            color: var(--text-color);
+        }
+
+        .linkedin-subtext {
+            font-size: 12px;
+            color: var(--muted-text);
+        }
+
+        .linkedin-content {
+            font-size: 15px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            color: var(--text-color);
+            margin-top: 8px;
+        }
+
+        .gradient-title {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            font-weight: 800;
+            font-size: 2.6rem;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--muted-text);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 def main():
     if "theme" not in st.session_state:
-       st.session_state.theme = False
-       
-    toggle = st.toggle("🌙 Dark Mode", value=st.session_state.theme)
+        st.session_state.theme = True
+
+    col_title, col_toggle = st.columns([5, 1.2])
+
+    with col_toggle:
+        toggle = st.toggle("🌙 Dark Mode", value=st.session_state.theme)
 
     st.session_state.theme = toggle
     apply_theme(st.session_state.theme)
 
     st.markdown(
-        "<h1 style='text-align:center;'>✍️ LinkedIn Post Generator</h1>",
+        """
+        <h1 class="gradient-title">✍️ LinkedIn Post Generator</h1>
+        <p class="subtitle">Craft engaging professional updates in seconds using AI and few-shot examples</p>
+        """,
         unsafe_allow_html=True
     )
 
     file_system = FewShotPrompting()
     tags = file_system.get_tags()
 
-    col1, col2, col3 = st.columns(3)
+    with st.container(border=True):
+        col1, col2, col3 = st.columns(3)
 
-    with col1:
-        selected_tag = st.selectbox("📌 Topic", options=tags, key="topic")
+        with col1:
+            selected_tag = st.selectbox("📌 Topic / Theme", options=tags, key="topic")
 
-    with col2:
-        selected_length = st.selectbox("📏 Length", options=length_options, key="length")
+        with col2:
+            selected_length = st.selectbox("📏 Desired Length", options=length_options, key="length")
 
-    with col3:
-        selected_language = st.selectbox("🌐 Language", options=language_options, key="language")
+        with col3:
+            selected_language = st.selectbox("🌐 Output Language", options=language_options, key="language")
 
-    generate_clicked = st.button("🚀 Generate Post", use_container_width=True)
+        st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
+        generate_clicked = st.button("🚀 Generate Post", use_container_width=True)
 
     if generate_clicked:
-        with st.spinner("Generating..."):
+        st.markdown("<div style='margin-top: 25px;'></div>", unsafe_allow_html=True)
+        with st.spinner("✨ Generating your perfect LinkedIn post..."):
             post = generate_post(selected_length, selected_language, selected_tag)
 
-        st.markdown("### 📝 Preview")
-        st.markdown(post)
+        with st.container(border=True):
+            st.markdown("### 📝 Output Preview")
 
-        st.text_area("", value=post, height=200, key="output")
+            tab_preview, tab_raw = st.tabs(["✨ Formatted Preview", "📋 Copy & Edit"])
 
-        col_a, col_b = st.columns(2)
+            with tab_preview:
+                st.markdown(
+                    f"""
+                    <div class="linkedin-card">
+                        <div class="linkedin-header">
+                            <span class="linkedin-avatar">✍️</span>
+                            <div class="linkedin-user-info">
+                                <strong>LinkedIn Post Generator</strong>
+                                <span class="linkedin-subtext">AI Content Creator • Just now</span>
+                            </div>
+                        </div>
+                        <div class="linkedin-content">{post}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
-        with col_a:
-            st.markdown(
-                f"""
-                <button onclick="navigator.clipboard.writeText(`{post}`)" 
-                style="width:100%;padding:10px;border-radius:8px;border:none;background:#4CAF50;color:white;">
-                📋 Copy to Clipboard
-                </button>
-                """,
-                unsafe_allow_html=True
-            )
+            with tab_raw:
+                st.code(post, language="text")
+                st.text_area("Interactive Editor", value=post, height=250, key="interactive_output")
 
-        with col_b:
             st.download_button(
-            label="Download Post",
-            data=post,  
-            file_name="post_content.txt",
-            mime="text/plain" )
-    
+                label="📥 Download Post as Text File",
+                data=post,
+                file_name=f"linkedin_post_{selected_tag.lower().replace(' ', '_')}.txt",
+                mime="text/plain",
+                use_container_width=True
+            )
 
 
 if __name__ == "__main__":

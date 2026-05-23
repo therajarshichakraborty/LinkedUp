@@ -28,8 +28,11 @@ def get_prompt(length, language, tag):
     1) Topic: {tag}
     2) Length: {length_str}
     3) Language: {language}
-    If Language is Hinglish then it means it is a mix of Hindi and English. 
-    The script for the generated post should always be English.
+    
+    Guideline for Language and Script:
+    - If Language is English, write the post in English language using the English script.
+    - If Language is Hinglish, write the post in Hinglish (a mix of Hindi and English) using the English (Latin) script.
+    - If Language is Bengali, write the post in the Bengali language using the Bengali script (বাংলা).
     """
     examples = few_shot.get_filtered_posts(length, language, tag)
 
