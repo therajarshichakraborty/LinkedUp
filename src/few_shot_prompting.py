@@ -1,11 +1,11 @@
 import json
 import pandas as pd
-
+import os
 
 class FewShotPrompting:
-    def __init__(self, file_path="../data/processed-post.json"):
-        self.df = None
-        self.unique_tags = None
+    def __init__(self):
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, "..", "data", "processed-post.json")
         self.load_posts(file_path)
 
     def load_posts(self, file_path):

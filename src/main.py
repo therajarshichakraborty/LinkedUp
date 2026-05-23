@@ -108,10 +108,10 @@ def main():
         with col_b:
             st.download_button(
             label="Download Post",
-            data=post.content,  
+            data=post,  
             file_name="post_content.txt",
             mime="text/plain" )
-    )
+    
 
 
 if __name__ == "__main__":
